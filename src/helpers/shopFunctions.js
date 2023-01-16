@@ -125,3 +125,14 @@ export const createProductElement = ({ id, title, thumbnail, price }) => {
 
   return section;
 };
+
+const creatLoadingElement = () => {
+  const loading = document.createElement('div');
+  loading.className = 'loading';
+  loading.innerText = 'carregando...';
+  return loading;
+};
+
+export const addLoading = () => {
+  document.querySelector('.products').appendChild(creatLoadingElement());
+};
