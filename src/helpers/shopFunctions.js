@@ -126,13 +126,14 @@ export const createProductElement = ({ id, title, thumbnail, price }) => {
   return section;
 };
 
-const creatLoadingElement = () => {
-  const loading = document.createElement('div');
-  loading.className = 'loading';
-  loading.innerText = 'carregando...';
-  return loading;
-};
+export const addLoading = () => document
+  .querySelector('.products')
+  .appendChild(createCustomElement('div', 'loading', 'carregando...'));
 
-export const addLoading = () => {
-  document.querySelector('.products').appendChild(creatLoadingElement());
-};
+export const addErro = () => document
+  .querySelector('.products')
+  .replaceChildren(createCustomElement(
+    'div',
+    'error',
+    'Algum erro ocorreu, recarregue a página e tente novamente',
+  ));
