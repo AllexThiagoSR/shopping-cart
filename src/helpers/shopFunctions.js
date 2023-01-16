@@ -1,4 +1,5 @@
 import { removeCartID } from './cartFunctions';
+import { fetchProduct } from './fetchFunctions';
 
 // Esses comentários que estão antes de cada uma das funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições!
@@ -18,6 +19,15 @@ const createProductImageElement = (imageSource) => {
 };
 
 /**
+ * Função que recupera o ID do produto passado como parâmetro.
+ * @param {Element} product - Elemento do produto.
+ * @returns {string} ID do produto.
+ */
+const getIdFromProduct = (product) => (
+  product.querySelector('span.product__id').innerText
+);
+
+/**
  * Função responsável por criar e retornar qualquer elemento.
  * @param {string} element - Nome do elemento a ser criado.
  * @param {string} className - Classe do elemento.
@@ -30,15 +40,6 @@ export const createCustomElement = (element, className, innerText = '') => {
   e.innerText = innerText;
   return e;
 };
-
-/**
- * Função que recupera o ID do produto passado como parâmetro.
- * @param {Element} product - Elemento do produto.
- * @returns {string} ID do produto.
- */
-export const getIdFromProduct = (product) => (
-  product.querySelector('span.product__id').innerText
-);
 
 /**
  * Função que remove o produto do carrinho.
@@ -91,6 +92,13 @@ export const createCartProductElement = ({ id, title, price, pictures }) => {
   return li;
 };
 
+export const addToCart = async (event) => {
+  const cart = document.querySelector('.cart__products');
+  const productId = getIdFromProduct(event.target.parentElement);
+  const product = await fetchProduct(productId);
+  cart.appendChild(createCartProductElement(product));
+};
+
 /**
  * Função responsável por criar e retornar o elemento do produto.
  * @param {Object} product - Objeto do produto.
@@ -121,6 +129,8 @@ export const createProductElement = ({ id, title, thumbnail, price }) => {
     'product__add',
     'Adicionar ao carrinho!',
   );
+
+  cartButton.addEventListener('click', addToCart);
   section.appendChild(cartButton);
 
   return section;
