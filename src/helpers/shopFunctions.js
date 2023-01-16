@@ -1,4 +1,4 @@
-import { removeCartID } from './cartFunctions';
+import { removeCartID, saveCartID } from './cartFunctions';
 import { fetchProduct } from './fetchFunctions';
 
 // Esses comentários que estão antes de cada uma das funções são chamados de JSdoc,
@@ -95,6 +95,7 @@ export const createCartProductElement = ({ id, title, price, pictures }) => {
 export const addToCart = async (event) => {
   const cart = document.querySelector('.cart__products');
   const productId = getIdFromProduct(event.target.parentElement);
+  saveCartID(productId);
   const product = await fetchProduct(productId);
   cart.appendChild(createCartProductElement(product));
 };
@@ -147,3 +148,8 @@ export const addErro = () => document
     'error',
     'Algum erro ocorreu, recarregue a página e tente novamente',
   ));
+
+export const getSavedProducts = () => {
+  if (!localStorage.cartProducts) localStorage.cartProducts = '[]';
+  console.log(localStorage.getItem('cartProducts'));
+};
