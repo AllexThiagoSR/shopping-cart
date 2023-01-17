@@ -57,7 +57,7 @@ const getPrices = () => Array
 const sumPrices = (prices) => {
   const total = document.querySelector('span.total-price');
   total.innerText = prices
-    .reduce((acc, { innerText }) => (acc + parseFloat(innerText)), 0);
+    .reduce((acc, { innerText }) => (acc + parseFloat(innerText.toFixed(2))), 0);
 };
 
 /**

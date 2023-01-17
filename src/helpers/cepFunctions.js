@@ -10,13 +10,18 @@ const getDistrict = ({ neighborhood, district }) => {
 
 const checkError = ({ type, status }) => type !== undefined || status !== undefined;
 
+const runFetch = async (endpoint) => {
+  const data = await (await fetch(endpoint)).json();
+  if (checkError(data)) throw new Error('problema api');
+  return data;
+};
+
 const fetchCep = async (cep) => {
   const address = await Promise.any([
-    fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`),
-    fetch(`https://cep.awesomeapi.com.br/json/${cep}`),
+    runFetch(`https://brasilapi.com.br/api/cep/v2/${cep}`),
+    runFetch(`https://cep.awesomeapi.com.br/json/${cep}`),
   ]);
-  const data = await address.json();
-  if (checkError(data)) throw new Error('CEP não encontrado');
+  const data = await address;
   return data;
 };
 
@@ -37,6 +42,7 @@ export const searchCep = async () => {
     const address = await getAddress(inputValue);
     addressSpan.innerText = address;
   } catch (error) {
-    addressSpan.innerText = error.message;
+    console.log(error);
+    addressSpan.innerText = 'CEP não encontrado';
   }
 };
