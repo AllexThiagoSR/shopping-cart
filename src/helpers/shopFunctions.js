@@ -51,6 +51,15 @@ const removeCartProduct = (li, id) => {
   removeCartID(id);
 };
 
+const getPrices = () => Array
+  .from(document.querySelectorAll('.cart__products .product__price__value'));
+
+const sumPrices = (prices) => {
+  const total = document.querySelector('span.total-price');
+  total.innerText = prices
+    .reduce((acc, { innerText }) => (acc + parseFloat(innerText)), 0);
+};
+
 /**
  * Função responsável por criar e retornar um product do carrinho.
  * @param {Object} product - Objeto do produto.
@@ -88,7 +97,10 @@ export const createCartProductElement = ({ id, title, price, pictures }) => {
   );
   li.appendChild(removeButton);
 
-  li.addEventListener('click', () => removeCartProduct(li, id));
+  li.addEventListener('click', () => {
+    removeCartProduct(li, id);
+    sumPrices(getPrices());
+  });
   return li;
 };
 
@@ -96,6 +108,7 @@ export const addToCart = async (id) => {
   const cart = document.querySelector('.cart__products');
   const product = await fetchProduct(id);
   cart.appendChild(createCartProductElement(product));
+  sumPrices(getPrices());
 };
 
 /**
