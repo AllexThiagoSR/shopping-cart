@@ -42,7 +42,6 @@ export const searchCep = async () => {
     const address = await getAddress(inputValue);
     addressSpan.innerText = address;
   } catch (error) {
-    console.log(error);
     addressSpan.innerText = 'CEP não encontrado';
   }
 };
