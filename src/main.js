@@ -21,3 +21,5 @@ try {
 } catch (error) {
   addErro();
 }
+
+// console.error('Alouuuuuu');
