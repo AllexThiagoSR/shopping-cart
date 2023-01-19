@@ -8,7 +8,6 @@ import {
 import './style.css';
 
 try {
-  getSavedProducts();
   const productsSec = document.querySelector('.products');
 
   document.querySelector('.cep-button').addEventListener('click', searchCep);
@@ -18,6 +17,8 @@ try {
   const products = await fetchProductsList('computador');
 
   productsSec.replaceChildren(...products.map(createProductElement));
+
+  getSavedProducts();
 } catch (error) {
   addErro();
 }
