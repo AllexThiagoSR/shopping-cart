@@ -165,8 +165,13 @@ export const addErro = () => document
     'Algum erro ocorreu, recarregue a página e tente novamente',
   ));
 
-export const getSavedProducts = () => {
+const fetchProductsOnCart = (ids) => ids.map(fetchProduct);
+
+export const getSavedProducts = async () => {
   if (!localStorage.cartProducts) localStorage.cartProducts = '[]';
-  const cartProducts = getSavedCartIDs();
-  cartProducts.forEach(addToCart);
+  const productsFetched = fetchProductsOnCart(getSavedCartIDs());
+  const cartProducts = await Promise.all(productsFetched);
+  document.querySelector('ol.cart__products').replaceChildren(...cartProducts
+    .map(createCartProductElement));
+  sumPrices(getPrices());
 };
