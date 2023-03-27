@@ -1,24 +1,24 @@
-import { searchCep } from './helpers/cepFunctions';
+import { addAddressOnPage } from './helpers/cepFunctions';
 import { fetchProductsList } from './helpers/fetchFunctions';
 import {
   createProductElement,
-  addLoading,
-  addErro,
-  getSavedProducts } from './helpers/shopFunctions';
+  addLoadingMessage,
+  addErrorMessage,
+  getLocalStorageProducts } from './helpers/shopFunctions';
 import './style.css';
 
 try {
-  const productsSec = document.querySelector('.products');
+  const productsSection = document.querySelector('.products');
 
-  document.querySelector('.cep-button').addEventListener('click', searchCep);
+  document.querySelector('.cep-button').addEventListener('click', addAddressOnPage);
 
-  addLoading();
+  addLoadingMessage();
 
-  const products = await fetchProductsList('computador');
+  const productsList = await fetchProductsList('computador');
 
-  productsSec.replaceChildren(...products.map(createProductElement));
+  productsSection.replaceChildren(...productsList.map(createProductElement));
 
-  getSavedProducts();
-} catch (error) {
-  addErro();
+  getLocalStorageProducts();
+} catch {
+  addErrorMessage();
 }

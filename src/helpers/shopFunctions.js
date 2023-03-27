@@ -51,12 +51,12 @@ const removeCartProduct = (li, id) => {
   removeCartID(id);
 };
 
-const getPrices = () => Array
+const getPricesOfCartProducts = () => Array
   .from(document.querySelectorAll('.cart__products .product__price__value'));
 
-const sumPrices = (prices) => {
+const sumCartProductsPrices = (productPrices) => {
   const total = document.querySelector('span.total-price');
-  total.innerText = prices
+  total.innerText = productPrices
     .reduce((acc, { innerText }) => (parseFloat(acc) + parseFloat(innerText))
       .toFixed(2), 0);
 };
@@ -100,16 +100,16 @@ export const createCartProductElement = ({ id, title, price, pictures }) => {
 
   li.addEventListener('click', () => {
     removeCartProduct(li, id);
-    sumPrices(getPrices());
+    sumCartProductsPrices(getPricesOfCartProducts());
   });
   return li;
 };
 
-export const addToCart = async (id) => {
+export const addProductToCart = async (id) => {
   const cart = document.querySelector('.cart__products');
   const product = await fetchProduct(id);
   cart.appendChild(createCartProductElement(product));
-  sumPrices(getPrices());
+  sumCartProductsPrices(getPricesOfCartProducts());
 };
 
 /**
@@ -146,18 +146,18 @@ export const createProductElement = ({ id, title, thumbnail, price }) => {
   cartButton.addEventListener('click', ({ target }) => {
     const productId = getIdFromProduct(target.parentElement);
     saveCartID(productId);
-    addToCart(productId);
+    addProductToCart(productId);
   });
   section.appendChild(cartButton);
 
   return section;
 };
 
-export const addLoading = () => document
+export const addLoadingMessage = () => document
   .querySelector('.products')
   .appendChild(createCustomElement('div', 'loading', 'carregando...'));
 
-export const addErro = () => document
+export const addErrorMessage = () => document
   .querySelector('.products')
   .replaceChildren(createCustomElement(
     'div',
@@ -167,11 +167,11 @@ export const addErro = () => document
 
 const fetchProductsOnCart = (ids) => ids.map(fetchProduct);
 
-export const getSavedProducts = async () => {
+export const getLocalStorageProducts = async () => {
   if (!localStorage.cartProducts) localStorage.cartProducts = '[]';
   const productsFetched = fetchProductsOnCart(getSavedCartIDs());
   const cartProducts = await Promise.all(productsFetched);
   document.querySelector('ol.cart__products').replaceChildren(...cartProducts
     .map(createCartProductElement));
-  sumPrices(getPrices());
+  sumCartProductsPrices(getPricesOfCartProducts());
 };

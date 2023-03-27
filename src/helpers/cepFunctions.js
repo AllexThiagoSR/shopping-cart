@@ -8,11 +8,11 @@ const getDistrict = ({ neighborhood, district }) => {
   return (verify ? neighborhood : district);
 };
 
-const checkError = ({ type, status }) => type !== undefined || status !== undefined;
+const checkCepError = ({ type, status }) => type !== undefined || status !== undefined;
 
 const runFetch = async (endpoint) => {
   const data = await (await fetch(endpoint)).json();
-  if (checkError(data)) throw new Error('problema api');
+  if (checkCepError(data)) throw new Error('End point inválido');
   return data;
 };
 
@@ -33,7 +33,7 @@ export const getAddress = async (cep) => {
   return `${street} - ${district} - ${city} - ${state}`;
 };
 
-export const searchCep = async () => {
+export const addAddressOnPage = async () => {
   const inputValue = document.querySelector('.cep-input').value;
   document.querySelector('.cep-input').value = '';
   const addressSpan = document.querySelector('.cart__address');
@@ -41,7 +41,7 @@ export const searchCep = async () => {
   try {
     const address = await getAddress(inputValue);
     addressSpan.innerText = address;
-  } catch (error) {
+  } catch {
     addressSpan.innerText = 'CEP não encontrado';
   }
 };
